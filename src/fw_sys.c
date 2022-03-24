@@ -16,7 +16,6 @@
 
 static const uint16_t ticks_ms = (__CONF_FOSC / (float)1000 / 13 - 46);
 static const uint8_t ticks_us = (__CONF_FOSC / (float)12100000UL);
-static uint8_t clkdiv = 0x1;
 
 /**
  * Change system clock
@@ -35,7 +34,6 @@ void SYS_SetClock(void)
         } while (--j);
     }
     P_SW2 = 0x00;
-    clkdiv = (__CONF_CLKDIV == 0)? 1 : __CONF_CLKDIV;
     SYS_SetFOSC(__CONF_IRCBAND, __CONF_VRTRIM, __CONF_IRTRIM, __CONF_LIRTRIM);
     while (--i); // Wait
 }
@@ -62,5 +60,5 @@ void SYS_DelayUs(uint16_t t)
 
 uint32_t SYS_GetSysClock(void)
 {
-    return ((uint32_t)__CONF_FOSC) / clkdiv;
+    return ((uint32_t)__CONF_FOSC) / (CLKDIV ? CLKDIV : 1);
 }
