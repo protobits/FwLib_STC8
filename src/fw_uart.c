@@ -16,9 +16,11 @@
 #include "fw_tim.h"
 #include "fw_sys.h"
 
-__CODE char hexTable[16] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+#ifdef FWLIB_STC8_UART_BUFFER
+__CODE char hexTable[16] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
 __IDATA char wptr, rptr, UART1_RxBuffer[UART_RX_BUFF_SIZE];
 __BIT busy;
+#endif
 
 int16_t UART_Timer_InitValueCalculate(uint32_t sysclk, HAL_State_t _1TMode, uint32_t baudrate)
 {
@@ -75,6 +77,8 @@ void UART1_Config9bitUart(UART1_BaudSource_t baudSource, HAL_State_t _1TMode, ui
     init = UART_Timer_InitValueCalculate(sysclk, _1TMode, baudrate);
     _UART1_ConfigDynUart(baudSource, _1TMode, init);
 }
+
+#ifdef FWLIB_STC8_UART_BUFFER
 
 void UART1_InterruptHandler(void)
 {
@@ -133,6 +137,7 @@ int putchar(int dat) {
     UART1_ClearTxInterrupt();
     return dat;
 }
+#endif
 
 
 /**************************************************************************** /
@@ -151,6 +156,8 @@ void UART2_Config(HAL_State_t _1TMode, uint32_t baudrate)
     TIM_Timer2_SetRunState(HAL_State_ON);
 }
 
+#ifdef FWLIB_STC8_UART_BUFFER
+
 void UART2_TxChar(char dat)
 {
     UART2_WriteBuffer(dat);
@@ -168,6 +175,7 @@ void UART2_TxString(uint8_t *str)
 {
     while (*str) UART2_TxChar(*str++);
 }
+#endif
 
 
 /**************************************************************************** /
