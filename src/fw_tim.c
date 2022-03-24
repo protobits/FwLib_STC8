@@ -64,7 +64,7 @@ void TIM_Timer1_Config(HAL_State_t freq1t, TIM_TimerMode_t mode, uint16_t freque
     }
     else
     {
-        init = TIM_Timer0n1_CalculateInitValue(frequency, freq1t, 0xFF);
+        init = TIM_Timer0n1_CalculateInitValue(frequency, freq1t, 0xFFFF);
         TIM_Timer1_SetInitValue(init >> 8, init & 0xFF);
     }
 }
